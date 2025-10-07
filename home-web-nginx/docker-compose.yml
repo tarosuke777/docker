@@ -1,0 +1,13 @@
+services:
+  home-web-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - home_network
+    restart: always
+networks:
+  home_network:
+    external: true

@@ -1,0 +1,15 @@
+services:
+  fluentd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+     - ./etc/fluent.conf:/fluentd/etc/fluent.conf
+     - ./log:/fluentd/log
+    networks:
+      - home_network
+    ports:
+      - "24224:24224"
+networks:
+  home_network:
+    external: true
