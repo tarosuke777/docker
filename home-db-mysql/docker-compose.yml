@@ -13,6 +13,7 @@ services:
       - mysql_root_password
       - mysql_hms_user_password
       - mysql_hb_user_password
+      - mysql_hv_user_password
     networks:
       - home_network
     healthcheck:
@@ -31,6 +32,8 @@ secrets:
     file: C:\\dev\\secrets\\mysql_hms_user_password.txt
   mysql_hb_user_password:
     file: C:\\dev\\secrets\\mysql_hb_user_password.txt
+  mysql_hv_user_password:
+    file: C:\\dev\\secrets\\mysql_hv_user_password.txt
 
 networks:
   home_network:
