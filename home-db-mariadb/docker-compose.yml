@@ -1,0 +1,47 @@
+services:
+  home-db-mariadb:
+    # 11.8系の最新パッチを自動で適用する設定
+    image: mariadb:11.8
+    container_name: home-db-mariadb
+    volumes:
+      # MySQL 8.4のデータとは互換性がないため、新しいボリュームを指定
+      - db_data_mariadb:/var/lib/mysql
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+    restart: always
+    ports:
+      - "13306:3306"
+    environment:
+      # Secretsからパスワードを読み込む設定
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+    secrets:
+      - mysql_root_password
+      - mysql_hms_user_password
+      - mysql_hb_user_password
+      - mysql_hv_user_password
+    networks:
+      - home_network
+    healthcheck:
+      # パスワードファイルの中身を使ってping確認を行う
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p$$(cat /run/secrets/mysql_root_password)"]
+      timeout: 5s
+      interval: 10s # 少し余裕を持たせました
+      retries: 5
+
+volumes:
+  # 名前を新しくして、MySQLの古いデータと混ざるのを防ぎます
+  db_data_mariadb:
+    name: home_db_mariadb_data
+
+secrets:
+  mysql_root_password:
+    file: C:\\dev\\secrets\\mysql_root_password.txt
+  mysql_hms_user_password:
+    file: C:\\dev\\secrets\\mysql_hms_user_password.txt
+  mysql_hb_user_password:
+    file: C:\\dev\\secrets\\mysql_hb_user_password.txt
+  mysql_hv_user_password:
+    file: C:\\dev\\secrets\\mysql_hv_user_password.txt
+
+networks:
+  home_network:
+    external: true
