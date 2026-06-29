@@ -1,0 +1,58 @@
+services:
+  # ログの保管庫
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - home_network
+    volumes:
+      - loki-storage:/loki
+
+  # ログの運び屋（WindowsのDockerログを拾う設定）
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - home_network
+
+  # 可視化・通知設定用
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_password
+    secrets:
+      - grafana_admin_password
+    depends_on:
+      - loki
+    networks:
+      - home_network
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:
+  loki-storage:
+
+networks:
+  home_network:
+    external: true
+
+secrets:
+  grafana_admin_password:
+    file: C:\\dev\\secrets\\grafana_admin_password.txt
