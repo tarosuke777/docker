@@ -11,4 +11,7 @@ services:
       - ALL
     cap_add:
       - NET_ADMIN
-
+    volumes:
+      - ai_project_data:/root
+volumes:
+  ai_project_data:
