@@ -1,0 +1,14 @@
+services:
+  ai-isolated-developer:
+    build: .
+    container_name: ai_sandbox_isolated
+    tty: true
+    stdin_open: true
+    restart: always
+    working_dir: /root
+    privileged: false
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_ADMIN
+
