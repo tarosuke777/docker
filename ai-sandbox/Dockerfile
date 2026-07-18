@@ -13,5 +13,8 @@ RUN apt-get update && \
 # agyへのパスを通す
 RUN echo 'export PATH="/root/.local/bin:$PATH"' >> /root/.bashrc
 
+# ブラウザ本体 と 構成に必要な依存パッケージを追加
+RUN npx playwright install --with-deps
+
 WORKDIR /root
 CMD ["bash"]
