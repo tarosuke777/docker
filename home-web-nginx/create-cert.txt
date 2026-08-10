@@ -7,9 +7,45 @@ cd /mnt/c/dev/docker/home-web-nginx
 # Ubuntuにopensslが入っていない場合は事前にインストール（通常は既に入っています）
 sudo apt update && sudo apt install -y openssl
 
-# 証明書の作成
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
-  -keyout ./server.key \
-  -out ./server.crt \
-  -subj "/CN=*.home.arpa" \
-  -addext "subjectAltName=DNS:*.home.arpa"
+# ルートCA（最初だけ）
+## 秘密鍵を作成
+openssl genrsa -out rootCA.key 2048
+
+## ルートCA証明書を作成（有効期限10年）
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 \
+  -out rootCA.crt \
+  -subj "/CN=MyPrivateRootCA"
+
+# 証明書の作成（各サイト毎）
+## adg
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout adg.key \
+  -out adg.csr \
+  -subj "/CN=adg.home.arpa"
+
+openssl x509 -req -in adg.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out adg.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:adg.home.arpa")
+
+## hms
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout hms.key \
+  -out hms.csr \
+  -subj "/CN=hms.home.arpa"
+
+openssl x509 -req -in hms.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out hms.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:hms.home.arpa")
+
+## www
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout www.key \
+  -out www.csr \
+  -subj "/CN=www.home.arpa"
+
+openssl x509 -req -in www.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out www.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:www.home.arpa")
