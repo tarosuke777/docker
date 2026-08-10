@@ -1,0 +1,15 @@
+# Cmd
+wsl -d Ubuntu -u root
+
+# Ubuntu
+cd /mnt/c/dev/docker/home-web-nginx
+
+# Ubuntuにopensslが入っていない場合は事前にインストール（通常は既に入っています）
+sudo apt update && sudo apt install -y openssl
+
+# 証明書の作成
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+  -keyout ./server.key \
+  -out ./server.crt \
+  -subj "/CN=www.home.arpa" \
+  -addext "subjectAltName=DNS:www.home.arpa"

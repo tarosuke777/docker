@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: always
+    ports:
+      # DNS 問い合わせ用ポート
+      - "53:53/tcp"
+      - "53:53/udp"
+      # 初期設定用ポｰト
+      - "3000:3000/tcp"
+      # 管理画面用ポート
+      - "8080:80/tcp"
+    volumes:
+      - adguard-data:/opt/adguardhome/work
+      - adguard-conf:/opt/adguardhome/conf
+
+# トップレベルでボリュームを定義する
+volumes:
+  adguard-data:
+  adguard-conf:

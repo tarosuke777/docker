@@ -1,0 +1,22 @@
+# --- SSL Certificates & Keys ---
+# 秘密鍵・証明書（必要に応じて個別でGit管理する場合はコメントアウト）
+server.crt
+server.key
+
+# --- Environment & Secret Files ---
+# 環境変数ファイルや機密情報
+.env
+.env.local
+*.env
+
+# --- OS / Editor Files ---
+# OSやエディタが自動生成する不要なファイル
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.tmp
+
+# --- Log files ---
+*.log

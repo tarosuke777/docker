@@ -1,0 +1,28 @@
+services:
+  backup:
+    image: alpine:latest
+    container_name: backup_loop
+    restart: unless-stopped
+    volumes:
+      # 既存の外部ボリュームを読み取り専用でマウント
+      - grafana_grafana-storage:/data/grafana:ro
+      - grafana_loki-storage:/data/loki:ro
+      - jenkins_jenkins_data:/data/jenkins:ro
+      # Windowsホスト側のバックアップ保存先
+      - C:\dev\backups:/archive
+    command: >
+      sh -c "while true; do
+        DATE=$$(date +%Y%m%d_%H%M%S);
+        tar czf /archive/grafana_$${DATE}.tar.gz -C /data/grafana .;
+        tar czf /archive/loki_$${DATE}.tar.gz -C /data/loki .;
+        tar czf /archive/jenkins_$${DATE}.tar.gz -C /data/jenkins .;
+        sleep 86400;
+      done"
+
+volumes:
+  grafana_grafana-storage:
+    external: true
+  grafana_loki-storage:
+    external: true
+  jenkins_jenkins_data:
+    external: true
