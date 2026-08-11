@@ -1,7 +1,9 @@
 # --- SSL Certificates & Keys ---
 # 秘密鍵・証明書（必要に応じて個別でGit管理する場合はコメントアウト）
-server.crt
-server.key
+*.crt
+*.key
+*.csr
+*.srl
 
 # --- Environment & Secret Files ---
 # 環境変数ファイルや機密情報
