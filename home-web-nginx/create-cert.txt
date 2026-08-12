@@ -60,3 +60,25 @@ openssl x509 -req -in sp-hms.csr \
   -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
   -out sp-hms.crt -days 3650 -sha256 \
   -extfile <(printf "subjectAltName=DNS:sp.hms.home.arpa")
+
+## grf
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout grf.key \
+  -out grf.csr \
+  -subj "/CN=grf.home.arpa"
+
+openssl x509 -req -in grf.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out grf.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:grf.home.arpa")
+
+## jnk
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout jnk.key \
+  -out jnk.csr \
+  -subj "/CN=jnk.home.arpa"
+
+openssl x509 -req -in jnk.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out jnk.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:jnk.home.arpa")
