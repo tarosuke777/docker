@@ -2,7 +2,7 @@
 wsl -d Ubuntu -u root
 
 # Ubuntu
-cd /mnt/c/dev/docker/home-web-nginx
+cd /mnt/c/dev/docker/home-web-nginx/certs
 
 # Ubuntuにopensslが入っていない場合は事前にインストール（通常は既に入っています）
 sudo apt update && sudo apt install -y openssl
@@ -49,3 +49,14 @@ openssl x509 -req -in www.csr \
   -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
   -out www.crt -days 3650 -sha256 \
   -extfile <(printf "subjectAltName=DNS:www.home.arpa")
+
+## sp.hms
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout sp-hms.key \
+  -out sp-hms.csr \
+  -subj "/CN=sp.hms.home.arpa"
+
+openssl x509 -req -in sp-hms.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out sp-hms.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:sp.hms.home.arpa")

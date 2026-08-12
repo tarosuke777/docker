@@ -11,6 +11,9 @@ services:
       - ALL
     cap_add:
       - NET_ADMIN
+    ports:
+      - "3000:3000"
+      - "8080:8080"
     volumes:
       - ai_project_data:/root
 volumes:

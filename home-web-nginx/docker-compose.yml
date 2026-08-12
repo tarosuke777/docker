@@ -6,12 +6,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
-      - ./www.crt:/etc/nginx/certs/www.crt:ro
-      - ./www.key:/etc/nginx/certs/www.key:ro
-      - ./hms.crt:/etc/nginx/certs/hms.crt:ro
-      - ./hms.key:/etc/nginx/certs/hms.key:ro
-      - ./adg.crt:/etc/nginx/certs/adg.crt:ro
-      - ./adg.key:/etc/nginx/certs/adg.key:ro
+      - ./certs:/etc/nginx/certs:ro
     ports:
       - "80:80"
       - "443:443"
