@@ -82,3 +82,14 @@ openssl x509 -req -in jnk.csr \
   -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
   -out jnk.crt -days 3650 -sha256 \
   -extfile <(printf "subjectAltName=DNS:jnk.home.arpa")
+
+## hb
+openssl req -new -nodes -newkey rsa:2048 \
+  -keyout hb.key \
+  -out hb.csr \
+  -subj "/CN=hb.home.arpa"
+
+openssl x509 -req -in jnk.csr \
+  -CA rootCA.crt -CAkey rootCA.key -CAcreateserial \
+  -out hb.crt -days 3650 -sha256 \
+  -extfile <(printf "subjectAltName=DNS:hb.home.arpa")
