@@ -14,6 +14,8 @@ services:
     ports:
       - "3000:3000"
       - "8080:8080"
+      - "5173:5173"
+      # - "18000:8000"
     volumes:
       - ai_project_data:/root
 volumes:
